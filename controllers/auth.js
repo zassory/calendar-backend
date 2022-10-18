@@ -1,41 +1,55 @@
 const { response } = require('express');
-const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const User = require('../models/User');
 
-const createUser = (req,res = response) => {
+const createUser = async(req,res = response) => {
     
     //Solo puede haber una unica respuesta solo una vez    
-    const { name , email , password } = req.body;
-    
-    //Manejo de errores
-    const errors = validationResult(  req  );
-    if( !errors.isEmpty() ){
-        return res.status(400).json({
-            ok:false,
-            errors: errors.mapped()
+    const { email , password } = req.body;
+
+    try{
+
+        let user = await User.findOne({ email });
+
+        if( user ){
+            return res.status(400).json({
+                ok:false,
+                msg:'Email already exists'
+            });
+        }
+        
+
+        user = new User( req.body );
+
+        //Encriptar password
+        const salt = bcrypt.genSaltSync();//10 por defecto
+        user.password = bcrypt.hashSync( password, salt );
+
+
+        await user.save();
+
+        res.status(201).json({
+            ok: true,
+            uid: user.id,
+            name: user.name
+        });
+
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Por favor hable con el administrador'
         });
     }
-
-    res.status(201).json({
-        ok: true,
-        msg:'registro',
-        name,
-        email,
-        password,
-    });
+               
 }
 
 const loginUser = (req,res = response) => {
     
     const { email , password } = req.body;
     
-    //Manejo de errores
-    const errors = validationResult(  req  );    
-    if(!errors.isEmpty()){
-        return res.status(400).json({
-            ok:false,
-            errors:errors.mapped()
-        });
-    }
+    
 
     res.status(202).json({
         ok: true,
