@@ -13,6 +13,8 @@ const {
     renewToken,
 } = require('../controllers/auth');
 
+const { validarJWT } = require('../middlewares/validar-jwt');
+
 const router = Router();
  
 router.post(
@@ -32,7 +34,7 @@ router.post('/',
     validarCampos
 ],loginUser);
 
-router.get('/renew', renewToken);
+router.get('/renew', validarJWT ,renewToken);
 
 
 
