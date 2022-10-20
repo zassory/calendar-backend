@@ -9,6 +9,8 @@ const { getEvents , createEvent , editEvent , deleteEvent } = require('../contro
 const {  check  } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
 
+const { isDate } = require('../helpers/isDate');
+
 const router = Router();
 
 //*Le digo que cualquier peticion que se encuentre debajo de esto
@@ -17,7 +19,14 @@ router.use( validarJWT );
 
 router.get('/' , getEvents);
 
-router.post('/', createEvent);
+router.post('/',
+[
+    check('title','titulo debe ser obligatorio').not().isEmpty(),
+    check('start','Fecha de fin debe ser una fecha valida').isDate(),
+    check('end','Fecha de fin debe ser una fecha valida').isDate(),
+    validarCampos
+],
+createEvent);
 
 router.put('/:id', editEvent);
 
