@@ -18,11 +18,18 @@ const EventSchema = Schema({
         required: true
     },
     user: {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,// <--- this is the type
         ref: 'User',
         required:true
     }
 });
 
+EventSchema.method('toJSON', function(){
+    //Le extraigo ambos y lo sobreescribo dejando solo el objeto
+    const { __v, _id, ...object } = this.toObject();
+    //Reemplazo y a la vez lo creo
+    object.id = _id;
+    return object;
+});
 
 module.exports = model('Event', EventSchema );

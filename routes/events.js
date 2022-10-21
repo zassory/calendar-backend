@@ -15,7 +15,8 @@ const router = Router();
 
 //*Le digo que cualquier peticion que se encuentre debajo de esto
 //*Va a tener que tener su token
-router.use( validarJWT );
+router.use( validarJWT ); //Aqui es donde agrega a mi
+                         //peticion el jwt
 
 router.get('/' , getEvents);
 
