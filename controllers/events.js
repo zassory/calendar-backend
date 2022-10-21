@@ -52,12 +52,11 @@ const editEvent = async(req,res=response) => {
 
     const eventId = req.params.id;
     const uid = req.uid;
-
-    console.log(req.params.id);
+    
 
     try{
 
-        const event = await Event.findById( eventId );        
+        const event = await Event.findById( eventId );
 
         if(!event){
             return res.status(404).json({
