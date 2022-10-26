@@ -4,8 +4,7 @@ const User = require('../models/User');
 const { generarJWT } = require('../helpers/jwt');
 
 const createUser = async(req,res = response) => {
-    
-    //Solo puede haber una unica respuesta solo una vez    
+        
     const { email , password } = req.body;
 
     try{
@@ -49,7 +48,7 @@ const createUser = async(req,res = response) => {
 }
 
 const loginUser = async(req,res = response) => {
-    
+        
     const { email , password } = req.body;
 
     const user = await User.findOne({ email });
@@ -94,16 +93,18 @@ const loginUser = async(req,res = response) => {
 }
 
 const renewToken = async(req,res = response) => {
-
+    
     const { uid , name } = req;
+    
+    // Generar JWT
+    const token = await generarJWT( uid, name );
 
-    const token = await generarJWT(uid,name);
+    console.log("----------------------");
+    console.log("Token en el renewToken      ", token);
 
     res.json({
-        ok: true,
-        uid,
-        name,
-        newtoken:token,
+        ok: true,        
+        newToken:token,
     });
 }
 

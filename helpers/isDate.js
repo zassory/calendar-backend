@@ -1,19 +1,22 @@
 const moment = require('moment');
 
 const isDate = ( value ) => {
-  
-    if(!value){
+
+    if ( !value ) {
         return false;
     }
 
     const fecha = moment( value );
-    if( fecha.isValid() ){
+    if ( fecha.isValid() ) {
         return true;
-    }else{
+    } else {
         return false;
     }
+    
 }
 
-module.exports = {
-    isDate
-};
+
+
+module.exports = { isDate };
+
+
